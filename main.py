@@ -1,61 +1,48 @@
-import re  # дозволяє працювати з регулярними виразами
-
-# створюю функцію для того щоб знайти та опрацювати перше речення у файлі.
+import re
+import pyuca
 
 
 def read_first_sentence(file_name):
     try:
-        # Відкриваємо файл для читання з кодуванням utf-8
         with open(file_name, 'r', encoding='utf-8') as file:
-            text = file.read()  # зчитуємо весь текст з файлу
-            # знаходимо перше речення за допомогою регулярного виразу
-            # пошук речення за допомогою ^ вказує на будь який символ, крім .!?, без повторень. Після того як наткнеться на символ - записує його у змінну.
+            text = file.read()
             match = re.search(r'[^.!?]*[.!?]', text)
             if match:
-                # повертаємо записане речення, після чого оброблюємо за допомогою strip
                 first_sentence = match.group().strip()
-                print("Перше речення:")  # виводимо перше реченя
+                print("Перше речення:")
                 print(first_sentence)
-                return first_sentence  # повертаємо перше речення для подальшої обробки
-            else:  # у разі помилки:
-                # виводимо помилку про незнаходження тексту у файлі
+                return first_sentence
+            else:
                 print("Файл не містить речень.")
-                return None  # повертаємо нічого
-    except FileNotFoundError:  # у разі помилки зі знаходженням файлу
-        print("Файл не знайдено.")  # виводимо помилку на екран
-        return None  # повертаємо нічого
-
-# функція для виводу слів і кількості слів
+                return None
+    except FileNotFoundError:
+        print("Файл не знайдено.")
+        return None
 
 
 def print_sorted_words(sentence):
     if sentence:
-        # функціонал для розділення речення по словам за допомогою регулярних виразів
-        # виділяє слова та перетворює букви в нижній регістр
         words = re.findall(r'\b\w+\b', sentence.lower())
-        # фільтр для розуміння яка це мова
-        # за допомогою циклу та вказанням алфавіту виконуємо пошук
+        collator = pyuca.Collator()
         ukr_words = [word for word in words if re.match(
-            r'^[а-яїєіґ\'’]+$', word)]
-        # за допомогою циклу та вказанням алфавіту виконуємо пошук
+            r'^[А-ЯЇЄІҐа-яїєіґ\'’ё]+$', word)]
         eng_words = [word for word in words if re.match(
             r'^[a-zA-Z\'’]+$', word)]
-        ukr_words.sort()  # сортування
-        eng_words.sort()  # сортування
-        # виводимо українські та англійські слова та кількість слів
+        ukr_words.sort(key=collator.sort_key)
+        eng_words.sort()
         print("\nСлова українською мовою:")
-        print(', '.join(ukr_words))  # Виводимо слова українською
-        # виводимо кількість слів українською
+        print(', '.join(ukr_words))
         print("Кількість слів українською мовою:", len(ukr_words))
         print("\nСлова англійською мовою:")
-        print(', '.join(eng_words))  # виводимо слова англійською
-        # виводимо кількість слів англійською
+        print(', '.join(eng_words))
         print("Кількість слів англійською мовою:", len(eng_words))
 
+
 def main():
-    file_name = 'file.txt'  # вказуємо який саме файл нам потрібно
-    first_sentence = read_first_sentence(file_name) # запускаємо першу функцію програми
-    print_sorted_words(first_sentence) # запускаємо другу функцію програми
+    file_name = 'file.txt'
+    first_sentence = read_first_sentence(file_name)
+    print_sorted_words(first_sentence)
+
 
 if __name__ == "__main__":
-    main()  # виклик main
+    main()
