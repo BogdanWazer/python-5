@@ -1,1 +1,1 @@
-Створити віртуальне оточення (ім'я оточення - прізвище студента) В цьому оточенні створити якийсь проект Python Create a virtual environment (the name of the environment is the student's surname). In this environment, create a Python project.
+Створити віртуальне оточення (ім'я оточення - прізвище студента) В цьому оточенні створити якийсь проект Python Create a virtual environment (the name of the environment is the student's surname). In this environment, create a Python project
